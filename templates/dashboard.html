@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Dashboard</h1>
+
+<div class="stats">
+  <div class="stat">
+    <div class="k">今日</div>
+    <div class="v">{{ today }}</div>
+  </div>
+  <div class="stat">
+    <div class="k">記録済み</div>
+    <div class="v">{{ saved_count }} / {{ total_clients }}</div>
+  </div>
+  <div class="stat">
+    <div class="k">未入力</div>
+    <div class="v">{{ missing_count }}</div>
+  </div>
+</div>
+
+<div class="section">
+  <h2 class="section-title">出席</h2>
+  <ul class="list-clean">
+    {% for r in present %}
+      <li>
+        <a href="/clients/{{ r.client_id }}">{{ get_client_name(r.client_id) }}</a>
+        <span>体調：{{ r.condition_score }}
+        {% if r.condition_score <= low_threshold %}
+        <span class="badge-warn">要注意</span>
+        {% endif %}
+        </span>
+      </li>
+    {% else %}
+      <li>出席なし</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<div class="section">
+  <h2 class="section-title">欠席</h2>
+  <ul class="list-clean">
+    {% for r in absent %}
+      <li>
+        <a href="/clients/{{ r.client_id }}">{{ get_client_name(r.client_id) }}</a>
+      <span>
+      体調：{{ r.condition_score }}
+           {% if r.condition_score <= low_threshold %}
+          <span class="badge-warn">要注意</span>
+         {% endif %}
+      </span>
+      </li>
+    {% else %}
+      <li>欠席なし</li>
+    {% endfor %}
+  </ul>
+</div>
+
+{% endblock %}

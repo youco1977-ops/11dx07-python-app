@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ client['name'] }}</h1>
+<p>種別：{{ client['type'] }}</p>
+
+<a class="btn" href="/records/new?client_id={{ client['id'] }}">
+  今日の記録を入力 <span aria-hidden="true">›</span>
+</a>
+
+{% endblock %}
