@@ -18,7 +18,7 @@
 1. XAMPP を起動（MySQL を Start）
 2. ライブラリをインストール
     ```bash
-・pip install -r requirements.txt
+    pip install -r requirements.txt
 3. env.example をコピーして .env 作成
 4. 起動
    python app.py
