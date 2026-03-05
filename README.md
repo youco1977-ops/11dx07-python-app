@@ -14,11 +14,14 @@
 - PyMySQL
 - HTML / Jinja2
 
-##起動方法
-・XAMPP起動
+## 起動方法
+1. XAMPP を起動（MySQL を Start）
+2. ライブラリをインストール
+    ```bash
 ・pip install -r requirements.txt
-・.env.example → .env 作成
-・python app.py
+3. env.example をコピーして .env 作成
+4. 起動
+   python app.py
 
 
 ## 機能一覧
