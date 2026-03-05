@@ -21,6 +21,7 @@
     pip install -r requirements.txt
 3. env.example をコピーして .env 作成
 4. 起動
+   ```bash
    python app.py
 
 
