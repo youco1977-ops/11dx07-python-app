@@ -5,7 +5,8 @@ import pymysql
 from datetime import date
 
 from pathlib import Path
-load_dotenv(Path(__file__).with_name(".env"))
+env_path = Path(__file__).with_name(".env")
+load_dotenv(env_path)
 
 app = Flask(__name__)
 
