@@ -2,24 +2,59 @@
 {% block content %}
 <h1>日次記録入力</h1>
 
-<form method="post" action="/records/save">
-  <input type="hidden" name="client_id" value="{{ client_id }}">
+<p class="muted">{{ client.name }}（種別：{{ client.type }}）</p>
+<p class="muted">記録日：{{ today }}</p>
 
-  <label>出席:
-    <select name="attendance">
+<form class="form" method="post" action="/records/save">
+  <input type="hidden" name="client_id" value="{{ client.id }}">
+
+  <div class="form-row">
+    <label for="attendance">出席</label>
+    <select name="attendance" id="attendance">
       <option value="present">出席</option>
       <option value="absent">欠席</option>
     </select>
-  </label>
+  </div>
 
-  <br><br>
+  <div class="form-row">
+    <label for="start_time">出所時間</label>
+    <input type="time" name="start_time" id="start_time">
+  </div>
 
-  <label>体調（1-10）:
-    <input type="number" name="condition" min="1" max="10" value="5">
-  </label>
+  <div class="form-row">
+    <label for="end_time">退所時間</label>
+    <input type="time" name="end_time" id="end_time">
+  </div>
 
-  <br><br>
+  <div class="form-row">
+    <label for="condition">体調（1-10）</label>
+    <input id="condition" type="number" name="condition" min="1" max="10" value="5" required>
+  </div>
 
- <button class="btn" type="submit">保存</button>
+  <div class="form-row form-row-top">
+    <label for="note">メモ</label>
+    <textarea id="note" name="note" rows="4"
+              placeholder="例：離席多め。声かけで復帰。"></textarea>
+  </div>
+
+  <div class="form-actions">
+    <button class="btn" type="submit">保存</button>
+  </div>
 </form>
+
+<script>
+  const sel = document.getElementById("attendance");
+  const st = document.getElementById("start_time");
+  const et = document.getElementById("end_time");
+
+  function syncTimeEnabled() {
+    const isPresent = sel.value === "present";
+    st.disabled = !isPresent;
+    et.disabled = !isPresent;
+    if (!isPresent) { st.value = ""; et.value = ""; }
+  }
+
+  sel.addEventListener("change", syncTimeEnabled);
+  syncTimeEnabled();
+</script>
 {% endblock %}

@@ -6,17 +6,21 @@
   <title>{{ title or "支援記録システム" }}</title>
 
   <style>
-    :root{
-  --bg:#eef2ff;        /* 背景を少し濃く */
+  :root{
+  --bg:#FFFBF5;
   --card:#ffffff;
-  --text:#0b1220;
-  --muted:#475569;
-  --line:#cbd5e1;      /* 線を濃く */
-  --accent:#1d4ed8;    /* 青を濃く */
-  --accent2:#1e40af;
-  --shadow: 0 10px 28px rgba(2,6,23,.16); /* 影を強め */
+
+  --text:#2E2300;
+  --muted:#6E6702;
+
+  --accent:#DB9501;
+  --accent2:#DB9501;
+
+  --line: rgba(219,149,1,.35);
+  --shadow: 0 10px 28px rgba(46,35,0,.12);
   --radius: 14px;
 }
+
     *{ box-sizing:border-box; }
     body{
       margin:0;
@@ -50,8 +54,8 @@
     }
     .brand-badge{
       width:34px;height:34px;border-radius:10px;
-      background: linear-gradient(135deg, var(--accent), #22c55e);
-      box-shadow: 0 10px 18px rgba(37,99,235,.25);
+      background: linear-gradient(135deg, var(--accent), #FFD54F);
+      box-shadow: 0 10px 18px rgba(46,35,0,.12);
     }
     .nav{
       display:flex; align-items:center; gap:10px;
@@ -63,14 +67,14 @@
     border:1px solid transparent;
     }
     .nav a.active{
-    background:#dbeafe;
-    border:1px solid #93c5fd;
+    background: rgba(245,124,0,.12);
+    border:1px solid rgba(245,124,0,.35);
+    color: var(--accent2);
     box-shadow: 0 6px 14px rgba(2,6,23,.10);
     }
-    
-    .nav a:hover{
-      background:#eef2ff;
-      text-decoration:none;
+.nav a:hover{
+    background: rgba(245,124,0,.08);
+    text-decoration:none;
     }
 
     .container { padding: 16px; max-width: 980px; margin: 18px auto; }
@@ -103,6 +107,7 @@
     .btn{
       display:inline-block;
       padding: 10px 14px;
+      margin-bottom: 20px;
       border-radius: 12px;
       background: var(--accent);
       color: #fff;
@@ -112,12 +117,19 @@
     }
     .btn:hover{ background: var(--accent2); text-decoration:none; }
     .btn-ghost{
-      display:inline-block;
-      padding: 10px 14px;
-      border-radius: 12px;
-      background: #f3f4f6;
-      color: var(--text);
-      border: 1px solid var(--line);
+    display:inline-block;
+    padding:10px 14px;
+    border-radius:12px;
+    border:1px solid rgba(219,149,1,.35);
+    background: rgba(245,124,0,.12);
+    color: var(--accent2);
+    font-weight: 800;
+    text-decoration:none;
+    box-shadow: 0 6px 14px rgba(2,6,23,.10);
+    }
+  .btn-ghost:hover{
+  background: rgba(245,124,0,.18);
+  text-decoration:none;
     }
 
     label{ display:block; font-weight:700; margin: 10px 0 6px; }
@@ -232,8 +244,141 @@
 .card-item:hover .chev{
   filter: brightness(0.95);
 }
+.detail-cols{
+  display: grid;
+  grid-template-columns: 56px 80px 34px; /* 出欠 / 体調 / アイコン */
+  align-items: center;
+  justify-items: end;
+  column-gap: 10px;
+}
 
-  </style>
+/* メモがない時のダミーは薄く */
+.memo.placeholder{
+  opacity: .18;
+  cursor: default;
+}
+.memo.placeholder .memo-tip{ display:none; }
+
+.memo{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;      /* ←大きくする */
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.memo:hover,
+.memo:focus{
+  background: rgba(0,0,0,0.04);
+}
+
+.memo-tip{
+  position: absolute;
+  right: 0;
+  top: 120%;
+  min-width: 220px;
+  max-width: 360px;
+  white-space: pre-wrap;
+  padding: 10px 12px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity .15s ease, transform .15s ease;
+  z-index: 50;
+}
+
+.memo:hover .memo-tip,
+.memo:focus .memo-tip{
+  opacity: 1;
+  transform: translateY(0);
+}
+.col-status.present,
+.col-status.absent{
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.col-status.present{ background: rgba(0,180,100,.10); color:#0b6; }
+.col-status.absent { background: rgba(220,60,60,.10);  color:#c33; }
+
+.memo.placeholder{ pointer-events:none; }
+
+.section-card{
+  margin-top: 14px;
+  padding: 14px 16px;
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 16px;
+  background: #fff;
+}
+
+.section-card .section-title{
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+.memo.placeholder{pointer-events:none; }
+.col-status{ font-weight:700; }
+.col-status.present{ color:#0b6; }
+.col-status.absent{ color:#c33; }  
+
+.form{
+  max-width: 560px;
+  margin-top: 12px;
+}
+.muted{
+   margin: 6px 0; 
+  }
+
+.form-row{
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 10px;
+  align-items: center;
+  margin: 14px 0;
+}
+
+.form-row label{
+  font-weight: 800;
+}
+
+.form-row input[type="number"],
+.form-row input[type="time"],
+.form-row select,
+.form-row textarea{
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid rgba(0,0,0,.14);
+  border-radius: 12px;
+  font-size: 15px;
+  background: #fff;
+}
+
+.form-row textarea{
+  min-height: 110px;
+  resize: vertical;
+}
+
+.form-row-top{
+  align-items: start;
+}
+
+.form-actions{
+  margin-top: 18px;
+}
+
+</style>
 </head>
 
 <body>

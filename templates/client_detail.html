@@ -7,4 +7,40 @@
   今日の記録を入力 <span aria-hidden="true">›</span>
 </a>
 
+<div class="section-card">
+<h2 class="section-title">直近7日</h2>
+
+{% if history and history|length > 0 %}
+  <ul class="list-clean">
+    {% for r in history %}
+      <li class="row">
+        <span>{{ r.record_date }}</span>
+
+        <div class="right detail-cols">
+  <span class="col-status {{ 'present' if r.attendance=='present' else 'absent' }}">
+  {{ "出席" if r.attendance=="present" else "欠席" }}
+</span>
+
+  <span class="col-cond">
+    体調：{{ r.condition_score }}
+  </span>
+
+  <span class="col-memo">
+    {% if r.note %}
+      <span class="memo" tabindex="0">📝
+        <span class="memo-tip">{{ r.note }}</span>
+      </span>
+    {% else %}
+      <span class="memo placeholder" aria-hidden="true">📝</span>
+    {% endif %}
+  </span>
+</div>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="muted">直近7日の記録はまだありません。</p>
+{% endif %}
+</div>
+
 {% endblock %}

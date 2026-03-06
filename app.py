@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, abort
 from dotenv import load_dotenv
 import os
 import pymysql
@@ -42,9 +42,10 @@ def dashboard():
     conn = get_conn()
     with conn.cursor() as cur:
         cur.execute(
-            "SELECT client_id, attendance, condition_score FROM daily_records WHERE record_date=%s",
-            (today,)
-        )
+    "SELECT client_id, attendance, condition_score, start_time, end_time, note "
+     "FROM daily_records WHERE record_date=%s",
+    (today,)
+    )
         rows = cur.fetchall()
     conn.close()
 
@@ -78,33 +79,83 @@ def client_detail(client_id):
     client = next((c for c in CLIENTS if c["id"] == client_id), None)
     if not client:
         return "Not Found", 404
-    return render_template("client_detail.html", title="利用者詳細", client=client)
+
+    conn = get_conn()
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT record_date, attendance, start_time, end_time, condition_score, note
+            FROM daily_records
+            WHERE client_id=%s
+            ORDER BY record_date DESC
+            LIMIT 7
+            """,
+            (client_id,)
+        )
+        history = cur.fetchall()
+    conn.close()
+
+    return render_template("client_detail.html", title="利用者詳細", client=client, history=history)
 
 @app.route("/records/new")
 def record_new():
-    client_id = request.args.get("client_id")
-    return render_template("record_form.html", client_id=client_id)
+    client_id = request.args.get("client_id", type=int)
+    if not client_id:
+        abort(400, description="client_id が必要です")
+
+    client = next((c for c in CLIENTS if c["id"] == client_id), None)
+    if not client:
+        abort(404, description="利用者が見つかりません")
+
+    return render_template(
+        "record_form.html",
+        client=client,
+        today=date.today().isoformat()
+    )
 
 @app.route("/records/save", methods=["POST"])
 def record_save():
     client_id = int(request.form.get("client_id"))
     attendance = request.form.get("attendance")
-    condition = int(request.form.get("condition"))
+
+    # 体調
+    condition_raw = request.form.get("condition")
+    if not condition_raw:
+        abort(400, description="体調が未入力です")
+    condition = int(condition_raw)
+
+    # 追加：時間とメモ（空はNone）
+    start_time = request.form.get("start_time") or None
+    end_time   = request.form.get("end_time") or None
+    note       = request.form.get("note", "").strip() or None
+
+    # 欠席なら時間はクリア（事故防止）
+    if attendance == "absent":
+        start_time = None
+        end_time = None
+
+    # 時間の前後チェック（両方入ってるときだけ）
+    if start_time and end_time and end_time < start_time:
+        abort(400, description="退所時間は出所時間より後にしてください")
 
     today = date.today()
 
     sql = """
-    INSERT INTO daily_records (client_id, record_date, attendance, condition_score)
-    VALUES (%s, %s, %s, %s)
+    INSERT INTO daily_records
+      (client_id, record_date, attendance, start_time, end_time, condition_score, note)
+    VALUES
+      (%s, %s, %s, %s, %s, %s, %s)
     ON DUPLICATE KEY UPDATE
       attendance = VALUES(attendance),
-      condition_score = VALUES(condition_score);
+      start_time = VALUES(start_time),
+      end_time = VALUES(end_time),
+      condition_score = VALUES(condition_score),
+      note = VALUES(note);
     """
 
     conn = get_conn()
     with conn.cursor() as cur:
-        cur.execute(sql, (client_id, today, attendance, condition))
-    conn.commit()
+        cur.execute(sql, (client_id, today, attendance, start_time, end_time, condition, note))
     conn.close()
 
     return redirect(url_for("client_detail", client_id=client_id))
