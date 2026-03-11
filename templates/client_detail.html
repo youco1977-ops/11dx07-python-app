@@ -1,46 +1,76 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>{{ client['name'] }}</h1>
-<p>種別：{{ client['type'] }}</p>
 
-<a class="btn" href="/records/new?client_id={{ client['id'] }}">
-  今日の記録を入力 <span aria-hidden="true">›</span>
-</a>
 
-<div class="section-card">
-<h2 class="section-title">直近7日</h2>
+<div class="card detail-card">
+  <h1 class="client-title">
+  <span class="code">#{{ client.client_code }}</span>
+  {{ client.name }}</h1>
+  
+  <p>種別：{{ client.type }}</p>
 
-{% if history and history|length > 0 %}
-  <ul class="list-clean">
-    {% for r in history %}
-      <li class="row">
-        <span>{{ r.record_date }}</span>
+  <a class="btn" href="/records/new?client_id={{ client.id }}">
+    今日の記録を入力 <span aria-hidden="true">›</span>
+  </a>
 
-        <div class="right detail-cols">
-  <span class="col-status {{ 'present' if r.attendance=='present' else 'absent' }}">
-  {{ "出席" if r.attendance=="present" else "欠席" }}
-</span>
+  {% if client.storage_folder %}
+    <a class="folder corner-main"
+     href="{{ url_for('open_client_folder', client_id=client['id']) }}"
+     title="フォルダを開く">
+    📁
+    <span class="folder-tip">{{ client.storage_folder }}</span>
+  </a>
+  {% endif %}
 
-  <span class="col-cond">
-    体調：{{ r.condition_score }}
-  </span>
+  <div class="section-card">
+    <h2 class="section-title">直近7日</h2>
 
-  <span class="col-memo">
-    {% if r.note %}
-      <span class="memo" tabindex="0">📝
-        <span class="memo-tip">{{ r.note }}</span>
-      </span>
+    {% if history and history|length > 0 %}
+      <ul class="list-clean">
+        {% for r in history %}
+          <li class="row">
+            <span>{{ r.record_date }}</span>
+
+            <div class="right detail-cols">
+              <span class="col-status {{ 'present' if r.attendance=='present' else 'absent' }}">
+                {{ "出席" if r.attendance=="present" else "欠席" }}
+              </span>
+
+              <span class="col-cond">体調：{{ r.condition_score }}</span>
+
+              <span class="col-memo">
+                {% if r.note %}
+                  <span class="memo" tabindex="0">📝
+                    <span class="memo-tip">{{ r.note }}</span>
+                  </span>
+                {% else %}
+                  <span class="memo placeholder" aria-hidden="true">📝</span>
+                {% endif %}
+              </span>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
     {% else %}
-      <span class="memo placeholder" aria-hidden="true">📝</span>
+      <p class="muted">直近7日の記録はまだありません。</p>
     {% endif %}
-  </span>
+  </div>
 </div>
-      </li>
-    {% endfor %}
-  </ul>
-{% else %}
-  <p class="muted">直近7日の記録はまだありません。</p>
-{% endif %}
-</div>
+<div class="section-card">
+  <h2 class="section-title">ファイル一覧</h2>
 
+  {% if files %}
+    <ul class="list-clean">
+      {% for file in files %}
+        <li>
+          <a href="{{ url_for('client_file_view', client_id=client['id'], filename=file) }}" target="_blank">
+            {{ file }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>表示できるファイルはありません</p>
+  {% endif %}
+</div>
 {% endblock %}

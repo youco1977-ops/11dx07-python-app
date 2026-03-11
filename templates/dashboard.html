@@ -21,27 +21,33 @@
   <h2 class="section-title">出席</h2>
   <ul class="list-clean">
     {% for r in present %}
-      <li class="row">
-        <a href="{{ url_for('client_detail', client_id=r.client_id) }}">
+      <li class="row attendance-row">
+        <a class="name" href="{{ url_for('client_detail', client_id=r.client_id) }}">
           {{ get_client_name(r.client_id) }}
         </a>
 
-        <div class="right">
-          {% if r.start_time and r.end_time %}
-            <span class="time">{{ (r.start_time|string)[:5] }}-{{ (r.end_time|string)[:5] }}</span>
-          {% endif %}
-
-          {% if r.note %}
-          <span class="memo" tabindex="0">📝
-          <span class="memo-tip">{{ r.note }}</span>
+        <div class="right attendance-right">
+          <span class="time">
+            {% if r.start_time and r.end_time %}
+              {{ (r.start_time|string)[:5] }}-{{ (r.end_time|string)[:5] }}
+            {% endif %}
           </span>
-          {% endif %}
 
-          <span>体調：{{ r.condition_score }}</span>
+          <span class="score">体調：{{ r.condition_score }}</span>
 
-          {% if r.condition_score is not none and r.condition_score < low_threshold %}
-            <span class="badge-warn">要注意</span>
-          {% endif %}
+          <span class="warn-slot">
+            {% if r.condition_score is not none and r.condition_score < low_threshold %}
+              <span class="badge-warn">要注意</span>
+            {% endif %}
+          </span>
+
+          <span class="memo-slot">
+            {% if r.note %}
+              <span class="memo" tabindex="0">📝
+                <span class="memo-tip">{{ r.note }}</span>
+              </span>
+            {% endif %}
+          </span>
         </div>
       </li>
     {% else %}
@@ -54,16 +60,29 @@
   <h2 class="section-title">欠席</h2>
   <ul class="list-clean">
     {% for r in absent %}
-      <li class="row">
-        <a href="{{ url_for('client_detail', client_id=r.client_id) }}">
+      <li class="row attendance-row">
+        <a class="name" href="{{ url_for('client_detail', client_id=r.client_id) }}">
           {{ get_client_name(r.client_id) }}
         </a>
 
-        <div class="right">
-          {% if r.note %}
-            <span class="memo" title="{{ r.note }}">📝</span>
-          {% endif %}
-          <span>体調：{{ r.condition_score }}</span>
+        <div class="right attendance-right">
+          <span class="time"></span>
+
+          <span class="score">体調：{{ r.condition_score }}</span>
+
+          <span class="warn-slot">
+            {% if r.condition_score is not none and r.condition_score < low_threshold %}
+              <span class="badge-warn">要注意</span>
+            {% endif %}
+          </span>
+
+          <span class="memo-slot">
+            {% if r.note %}
+              <span class="memo" tabindex="0">📝
+                <span class="memo-tip">{{ r.note }}</span>
+              </span>
+            {% endif %}
+          </span>
         </div>
       </li>
     {% else %}
