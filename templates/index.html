@@ -4,9 +4,11 @@
 <h1>支援記録システム</h1>
 <p class="sub">システムへようこそ</p>
 
-<a class="btn" href="/dashboard">Dashboard</a>
-<a class="btn-ghost" href="/clients" style="margin-left:8px;">利用者一覧</a>
-
+<div class="home-actions">
+  <a class="btn" href="{{ url_for('dashboard') }}">Dashboard</a>
+  <a class="btn-ghost" href="{{ url_for('clients') }}">利用者一覧</a>
+  <a class="btn-ghost" href="{{ url_for('client_new') }}">＋ 利用者登録</a>
+</div>
 
 
 {% endblock %}

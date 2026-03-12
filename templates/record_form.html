@@ -2,14 +2,16 @@
 {% block content %}
 <h1>日次記録入力</h1>
 
-<p class="muted">{{ client.name }}（種別：{{ client.type }}）</p>
-<p class="muted">記録日：{{ today }}</p>
+<div class="meta-block">
+  <p class="muted">{{ client.name }}（種別：{{ client.type }}）</p>
+  <p class="muted">記録日：{{ today }}</p>
+</div>
 
 <form class="form" method="post" action="/records/save">
   <input type="hidden" name="client_id" value="{{ client.id }}">
 
   <div class="form-row">
-    <label for="attendance">出席</label>
+    <label for="attendance">出欠状況</label>
     <select name="attendance" id="attendance">
       <option value="present">出席</option>
       <option value="absent">欠席</option>
@@ -17,12 +19,12 @@
   </div>
 
   <div class="form-row">
-    <label for="start_time">出所時間</label>
+    <label for="start_time">開始時間</label>
     <input type="time" name="start_time" id="start_time">
   </div>
 
   <div class="form-row">
-    <label for="end_time">退所時間</label>
+    <label for="end_time">終了時間</label>
     <input type="time" name="end_time" id="end_time">
   </div>
 

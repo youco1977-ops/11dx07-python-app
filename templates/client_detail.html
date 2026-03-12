@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
 
+<h1>利用者詳細</h1>
 
 <div class="card detail-card">
-  <h1 class="client-title">
-  <span class="code">#{{ client.client_code }}</span>
-  {{ client.name }}</h1>
-  
+  <h2 class="client-title">
+    <span class="code">#{{ client.client_code }}</span>
+    {{ client.name }}
+  </h2>
+
   <p>種別：{{ client.type }}</p>
 
   <a class="btn" href="/records/new?client_id={{ client.id }}">
@@ -15,48 +17,49 @@
 
   {% if client.storage_folder %}
     <a class="folder corner-main"
-     href="{{ url_for('open_client_folder', client_id=client['id']) }}"
-     title="フォルダを開く">
-    📁
-    <span class="folder-tip">{{ client.storage_folder }}</span>
-  </a>
+       href="{{ url_for('open_client_folder', client_id=client['id']) }}"
+       title="フォルダを開く">
+      📁
+      <span class="folder-tip">{{ client.storage_folder }}</span>
+    </a>
   {% endif %}
-
-  <div class="section-card">
-    <h2 class="section-title">直近7日</h2>
-
-    {% if history and history|length > 0 %}
-      <ul class="list-clean">
-        {% for r in history %}
-          <li class="row">
-            <span>{{ r.record_date }}</span>
-
-            <div class="right detail-cols">
-              <span class="col-status {{ 'present' if r.attendance=='present' else 'absent' }}">
-                {{ "出席" if r.attendance=="present" else "欠席" }}
-              </span>
-
-              <span class="col-cond">体調：{{ r.condition_score }}</span>
-
-              <span class="col-memo">
-                {% if r.note %}
-                  <span class="memo" tabindex="0">📝
-                    <span class="memo-tip">{{ r.note }}</span>
-                  </span>
-                {% else %}
-                  <span class="memo placeholder" aria-hidden="true">📝</span>
-                {% endif %}
-              </span>
-            </div>
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p class="muted">直近7日の記録はまだありません。</p>
-    {% endif %}
-  </div>
 </div>
-<div class="section-card">
+
+<div class="card section-card">
+  <h2 class="section-title">直近7日</h2>
+
+  {% if history and history|length > 0 %}
+    <ul class="list-clean">
+      {% for r in history %}
+        <li class="row">
+          <span>{{ r.record_date }}</span>
+
+          <div class="right detail-cols">
+            <span class="col-status {{ 'present' if r.attendance=='present' else 'absent' }}">
+              {{ "出席" if r.attendance=="present" else "欠席" }}
+            </span>
+
+            <span class="col-cond">体調：{{ r.condition_score }}</span>
+
+            <span class="col-memo">
+              {% if r.note %}
+                <span class="memo" tabindex="0">📝
+                  <span class="memo-tip">{{ r.note }}</span>
+                </span>
+              {% else %}
+                <span class="memo placeholder" aria-hidden="true">📝</span>
+              {% endif %}
+            </span>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="muted">直近7日の記録はまだありません。</p>
+  {% endif %}
+</div>
+
+<div class="card section-card">
   <h2 class="section-title">ファイル一覧</h2>
 
   {% if files %}
@@ -73,4 +76,5 @@
     <p>表示できるファイルはありません</p>
   {% endif %}
 </div>
+
 {% endblock %}

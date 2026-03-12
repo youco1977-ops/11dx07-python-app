@@ -60,7 +60,7 @@ def home():
 @app.route("/dashboard")
 def dashboard():
     today = date.today()
-    low_threshold = 3
+    low_threshold = 4
 
     conn = get_conn()
     with conn.cursor() as cur:
@@ -73,10 +73,17 @@ def dashboard():
 
         cur.execute("SELECT COUNT(*) AS cnt FROM clients")
         total_clients = cur.fetchone()["cnt"]
+
+        cur.execute("SELECT id, name FROM clients ORDER BY id")
+        clients = cur.fetchall()
+
     conn.close()
 
     saved_count = len(rows)
-    missing_count = total_clients - saved_count
+
+    recorded_ids = {r["client_id"] for r in rows}
+    missing_clients = [c for c in clients if c["id"] not in recorded_ids]
+    missing_count = len(missing_clients)
 
     present = [r for r in rows if r["attendance"] == "present"]
     absent = [r for r in rows if r["attendance"] == "absent"]
@@ -90,6 +97,7 @@ def dashboard():
         missing_count=missing_count,
         present=present,
         absent=absent,
+        missing_clients=missing_clients,
         low_threshold=low_threshold,
         get_client_name=get_client_name
     )
