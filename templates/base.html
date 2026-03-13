@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ title or "支援記録システム" }}</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
@@ -23,11 +23,11 @@
     </div>
   </div>
 
-
+  <div class="container">
     <div class="card">
       {% block content %}{% endblock %}
     </div>
-    <div class="container">
+
     <div class="hero-brand">
       <img src="{{ url_for('static', filename='images/job-logo.png') }}" alt="ジョブリッジ ロゴ" class="hero-logo">
     </div>
