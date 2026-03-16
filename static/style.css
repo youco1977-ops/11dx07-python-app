@@ -772,6 +772,17 @@ textarea:focus{
     align-items: center;
     width: 100%;
   }
+  
+.section:last-of-type .attendance-row .right{
+    width: 100%;
+    padding-left: 180px;
+   }
+
+   .section:last-of-type .btn-ghost{
+  padding: 7px 11px;
+  font-size: 13px;
+  line-height: 1.2;
+}
 
   .time{
     min-width: 0;
