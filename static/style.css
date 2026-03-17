@@ -609,14 +609,21 @@ textarea:focus{
   position: absolute;
   right: 0;
   top: 120%;
-  min-width: 220px;
-  max-width: 420px;
+  min-width: 140px;
+  max-width: 220px;
   white-space: pre-wrap;
-  padding: 10px 12px;
+  padding: 6px 8px;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(46,35,0,0.12);
   background: #fff;
   border: 1px solid rgba(219,149,1,.28);
+
+  font-size: 18px;
+  line-height: 1.4;
+  color: #7a5a00;
+
+  white-space: normal;
+  word-break: break-word;
 
   opacity: 0;
   transform: translateY(-6px);
@@ -634,7 +641,7 @@ textarea:focus{
 .folder.corner-main{
   position: absolute;
   right: 24px;
-  top: 120px;
+  top: 100px;
   font-size: 50px;
   padding: 6px 10px;
 }

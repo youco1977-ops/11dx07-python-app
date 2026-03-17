@@ -18,7 +18,7 @@
   {% if client.storage_folder %}
     <a class="folder corner-main"
        href="{{ url_for('open_client_folder', client_id=client['id']) }}"
-       title="フォルダを開く">
+       >
       📁
       <span class="folder-tip">{{ client.storage_folder }}</span>
     </a>
