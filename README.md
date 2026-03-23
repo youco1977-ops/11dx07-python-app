@@ -93,11 +93,4 @@ mysql -u root -p jobrich_support < db/seed.sql
 - 管理者ログイン機能
 - 添付ファイル対応の拡張
 
-## ポイント（面接・実習説明用）
-- ChatGPTとGitHubを併用して作成
-- Flaskを用いたWebアプリ構築
-- MySQLとの接続処理実装
-- POST処理・フォーム送信対応
-- `ON DUPLICATE KEY` による更新処理
-- 環境変数（`.env`）を利用した設定管理
-- 利用者フォルダの自動生成とファイル表示機能を実装
+
