@@ -19,11 +19,13 @@
 1. XAMPP を起動（MySQL を Start）
 2. ライブラリをインストール
       ```bash
-      pip install -r requirements.txt
+pip install -r requirements.txt
+    ```
 3. env.example をコピーして .env 作成
 4. 起動
-   ```bash
-   python app.py
+      ```bash
+python app.py
+      ```
 
 ## 機能一覧
 1. **利用者登録（新規）**
@@ -56,7 +58,6 @@
 - 日次記録入力（例）：`http://127.0.0.1:5000/records/new?client_id=1`
 
 ## データベース設計
-## データベース設計
 
 ### テーブル：clients
 | カラム名 | 型 | 内容 |
@@ -78,6 +79,13 @@
 | end_time | TIME | 利用終了時間 |
 | condition_score | INT | 体調 |
 | note | TEXT | メモ |
+
+## DB（サンプルデータ）
+
+   ```bash
+mysql -u root -p jobrich_support < db/schema.sql
+mysql -u root -p jobrich_support < db/seed.sql
+   ```
 
 ## 今後の拡張予定
 - 月間出席一覧表示
