@@ -11,21 +11,27 @@
 ## 開発環境
 - Python 3.x
 - Flask
-- MySQL（XAMPP）
-- PyMySQL
-- HTML / Jinja2
+- MariaDB（xampp）
+- HTML / CSS / Jinja2
 
-## 起動方法
-1. XAMPP を起動（MySQL を Start）
-2. ライブラリをインストール
-      ```bash
-      pip install -r requirements.txt
-    ```
-3. env.example をコピーして .env 作成
-4. 起動
-      ```bash
-      python app.py
-      ```
+## 起動方法（先生確認用）
+※ 本アプリは Flask + MariaDB（XAMPP）で動作します。確認時は XAMPP の MySQL を起動した状態で `start_for_teacher.bat` を実行してください。
+
+1. XAMPP を起動し、MySQL を Start
+2. プロジェクトフォルダ内の `start_for_teacher.bat` をダブルクリック
+3. ブラウザで `http://127.0.0.1:5000` にアクセス
+
+## DB（サンプルデータ）
+```bash
+mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS jobrich_support CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
+mysql -u root -p jobrich_support < db/schema.sql
+mysql -u root -p jobrich_support < db/seed.sql
+   ```
+
+### 補足
+- 初回起動時は仮想環境の作成とライブラリのインストールを行います
+- `.env` が存在しない場合は `env.example` をもとに自動作成します
+- MySQL が起動していない場合は接続エラーになります
 
 ## 機能一覧
 1. **利用者登録（新規）**
@@ -35,7 +41,7 @@
 3. **利用者詳細表示**
    - 利用者ごとの詳細画面 
    - 専用フォルダ
-   - ファイル一覧表示（PDF・画像・txt
+   - ファイル一覧表示（PDF・画像・txt）
 4. **日次記録入力**
    - 出席（出席 / 欠席）
    - 体調（1〜10）
@@ -60,32 +66,31 @@
 ## データベース設計
 
 ### テーブル：clients
-| カラム名 | 型 | 内容 |
-|---|---|---|
-| id | INT | 主キー |
-| client_code | VARCHAR | 利用者コード |
-| name | VARCHAR | 氏名 |
-| type | VARCHAR | 種別 |
-| storage_folder | VARCHAR | 保存フォルダ |
+| カラム名           | 型            | 内容     |
+| -------------- | ------------ | ------ |
+| id             | INT          | 主キー    |
+| client_code    | INT          | 利用者コード |
+| name           | VARCHAR(100) | 氏名     |
+| type           | VARCHAR(50)  | 種別     |
+| created_at     | DATETIME     | 作成日時   |
+| storage_folder | VARCHAR(255) | 保存フォルダ |
+
 
 ### テーブル：daily_records
-| カラム名 | 型 | 内容 |
-|---|---|---|
-| id | INT | 主キー |
-| client_id | INT | 利用者ID |
-| record_date | DATE | 記録日 |
-| attendance | VARCHAR(20) | 出席状況 |
-| start_time | TIME | 利用開始時間 |
-| end_time | TIME | 利用終了時間 |
-| condition_score | INT | 体調 |
-| note | TEXT | メモ |
+| カラム名            | 型           | 内容     |
+| --------------- | ----------- | ------ |
+| id              | INT         | 主キー    |
+| client_id       | INT         | 利用者ID  |
+| record_date     | DATE        | 記録日    |
+| attendance      | VARCHAR(20) | 出席状況   |
+| start_time      | TIME        | 利用開始時間 |
+| end_time        | TIME        | 利用終了時間 |
+| condition_score | INT         | 体調     |
+| note            | TEXT        | メモ     |
+| created_at      | DATETIME    | 作成日時   |
 
-## DB（サンプルデータ）
 
-   ```bash
-mysql -u root -p jobrich_support < db/schema.sql
-mysql -u root -p jobrich_support < db/seed.sql
-   ```
+
 
 ## 今後の拡張予定
 - 月間出席一覧表示

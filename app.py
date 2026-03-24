@@ -324,4 +324,4 @@ def not_found(e):
 
 # ルートはこの上に追加していく
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)
